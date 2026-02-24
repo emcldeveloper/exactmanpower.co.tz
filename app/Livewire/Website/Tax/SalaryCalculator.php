@@ -17,15 +17,15 @@ class SalaryCalculator extends Component
     public $currencyType = 'tz';
     public $exchangeRate = 1;
 
-    public $basic_pay = 0;
-    public $net_pay = 0;
+    public $basic_pay = null;
+    public $net_pay = null; // Changed from 0 to null
 
     public $allowances = [];
     public $total_allowance = 0;
 
     public $total_gross = 0;
     public $taxable_amount = 0;
-    public $pay = 0;
+    public $pay = null;
     public $ssc_employee = 0;
 
     public $ssc_employee_percentage = 0.10;
@@ -44,8 +44,12 @@ class SalaryCalculator extends Component
     public function mount()
     {
         $this->data = PayCalculator::first();
-        // $this->new = SalaryInsight::first()?->no_uses ?? 0;
         $this->new = SalaryInsightLog::count();
+        
+        // Initialize with null
+        $this->basic_pay = null;
+        $this->net_pay = null;
+        $this->allowances = [];
     }
 
     public function updated($property)
@@ -68,21 +72,27 @@ class SalaryCalculator extends Component
             $this->insight(); // increment once
         }
     }
+  
+    public function typing($field)
+    {
+        $this->activeField = $field;
+        $this->calculate();
+    }
 
     private function resetOppositeField()
     {
         if ($this->salaryType === 'net') {
-            $this->basic_pay = 0;
+            $this->basic_pay = null;
         }
 
         if ($this->salaryType === 'gross') {
-            $this->net_pay = 0;
+            $this->net_pay = null;
         }
     }
 
     public function addAllowance()
     {
-        $this->allowances[] = 0;
+        $this->allowances[] = null; // Changed from 0 to null
         $this->calculate();
     }
 
@@ -95,12 +105,20 @@ class SalaryCalculator extends Component
 
     public function calculate()
     {
-        $this->basic_pay = (float) ($this->basic_pay ?: 0);
-        $this->net_pay = (float) ($this->net_pay ?: 0);
-        $this->exchangeRate = (float) ($this->exchangeRate ?: 1);
+        // Only cast to float if the value is not null and not empty
+        $this->basic_pay = $this->basic_pay !== null && $this->basic_pay !== '' ? (float) $this->basic_pay : null;
+        $this->net_pay = $this->net_pay !== null && $this->net_pay !== '' ? (float) $this->net_pay : null;
+        $this->exchangeRate = $this->exchangeRate !== null && $this->exchangeRate !== '' ? (float) $this->exchangeRate : 1;
 
-        $this->allowances = array_map(fn ($v) => (float)($v ?: 0), $this->allowances);
-        $this->total_allowance = array_sum($this->allowances);
+        // Handle allowances - only cast non-null values
+        $this->allowances = array_map(function($v) {
+            return $v !== null && $v !== '' ? (float) $v : null;
+        }, $this->allowances);
+        
+        // Sum only non-null values for total_allowance
+        $this->total_allowance = array_sum(array_filter($this->allowances, function($v) {
+            return $v !== null;
+        }));
 
         if ($this->salaryType === 'gross') {
             $this->calculateFromGross();
@@ -113,12 +131,20 @@ class SalaryCalculator extends Component
 
     private function calculateFromGross()
     {
+        // Only calculate if basic_pay has a value
+        if ($this->basic_pay === null) {
+            $this->total_gross = 0;
+            $this->ssc_employee = 0;
+            $this->taxable_amount = 0;
+            $this->pay = 0;
+            $this->net_pay = null; // Keep net_pay as null initially
+            $this->calculateCompanyCost();
+            return;
+        }
+
         $this->total_gross = $this->basic_pay + $this->total_allowance;
-
         $this->ssc_employee = $this->total_gross * $this->ssc_employee_percentage;
-
         $this->taxable_amount = $this->total_gross - $this->ssc_employee;
-
         $this->pay = $this->calculatePAYE($this->taxable_amount);
 
         if ($this->activeField !== 'net_pay') {
@@ -130,12 +156,18 @@ class SalaryCalculator extends Component
 
     private function calculateFromNet()
     {
-        $targetNet = $this->net_pay;
-
-        if ($targetNet <= 0) {
+        // Only calculate if net_pay has a value
+        if ($this->net_pay === null || $this->net_pay <= 0) {
             $this->total_gross = 0;
+            $this->ssc_employee = 0;
+            $this->taxable_amount = 0;
+            $this->pay = 0;
+            $this->basic_pay = null; // Keep basic_pay as null initially
+            $this->calculateCompanyCost();
             return;
         }
+
+        $targetNet = $this->net_pay;
 
         $min = $targetNet;
         $max = $targetNet * 2;
@@ -192,7 +224,7 @@ class SalaryCalculator extends Component
 
     private function calculateCompanyCost()
     {
-        $gross = $this->total_gross;
+        $gross = $this->total_gross ?: 0;
 
         $this->employer_ssc = $gross * 0.10;
         $this->sdl = $gross * 0.035;
@@ -201,39 +233,10 @@ class SalaryCalculator extends Component
         $this->grand_total = $gross + $this->employer_ssc + $this->sdl + $this->wcf;
     }
 
-    // public function insight()
-    // {
-    //     SalaryInsight::first()?->increment('no_uses');
-    //     $this->new = SalaryInsight::first()?->no_uses ?? 0;
-    // }
-
-
-    // public function insight()
-    // {
-    //     SalaryInsightLog::create([
-    //         'salary_type'   => $this->salaryType,
-    //         'currency'      => $this->currencyType,
-    //         'period'        => $this->period,
-    //         'input_amount'  => $this->salaryType === 'net'
-    //                             ? $this->net_pay
-    //                             : $this->basic_pay,
-    //         'gross_amount'  => $this->total_gross,
-    //         'net_amount'    => $this->net_pay,
-    //         'ip_address'    => request()->ip(),
-    //         'user_agent'    => request()->userAgent(),
-    //     ]);
-
-    //     // Optional: Update counter display
-    //     $this->new = SalaryInsightLog::count();
-    // }
-
-
     public function insight()
     {
         $ip = request()->ip();
         $agent = new Agent();
-
-        // Apply it to geoip
 
         SalaryInsightLog::create([
 
@@ -244,12 +247,12 @@ class SalaryCalculator extends Component
 
             // Inputs
             'input_amount'  => $this->salaryType === 'net'
-                ? $this->net_pay
-                : $this->basic_pay,
+                ? ($this->net_pay ?? 0)
+                : ($this->basic_pay ?? 0),
 
             // Outputs
             'gross_amount'  => $this->total_gross,
-            'net_amount'    => $this->net_pay,
+            'net_amount'    => $this->net_pay ?? 0,
 
             // User info
             'ip_address'    => $ip,
@@ -266,9 +269,6 @@ class SalaryCalculator extends Component
         // Update UI usage counter
         $this->new = SalaryInsightLog::count();
     }
-
-
-
 
     public function render()
     {

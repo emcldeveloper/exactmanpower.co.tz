@@ -92,7 +92,7 @@
             </h3>
         </div>
 
-        <form wire:submit.prevent>
+        <form>
 
             <!-- Currency -->
             <div class="form-row">
@@ -134,7 +134,10 @@
             @if($salaryType === 'net')
             <div class="form-row">
                 <label>Net Salary</label>
-                <input type="number" step="any" wire:model.live.debounce.400ms="net_pay">
+                <input type="text" step="any" wire:model.live.debounce.900ms="net_pay" wire:keyup="typing('net_pay')"
+                    wire:keydown="activeField = 'net_pay'"
+                  placeholder="Enter net salary"
+                    >
             </div>
             @endif
 
@@ -142,14 +145,17 @@
             @if($salaryType === 'gross')
             <div class="form-row">
                 <label>Basic Salary</label>
-                <input type="number" step="any" wire:model.live.debounce.400ms="basic_pay">
+                <input type="text"  wire:model.live.debounce.900ms="basic_pay"
+                    wire:keyup="typing('basic_pay')" wire:keydown="activeField = 'basic_pay'"
+                   placeholder="Enter basic salary"
+                    >
             </div>
             @endif
 
             <!-- Allowances -->
             <div class="form-row">
                 <label></label>
-                <button type="button" wire:click="addAllowance" class="btn-main w-100">
+                <button type="button" wire:click="addAllowance" class="btn-main w-60">
                     + Add Allowance
                 </button>
             </div>
@@ -158,7 +164,9 @@
             <div class="form-row" wire:key="allowance-{{ $index }}">
                 <label>Allowance {{ $index + 1 }}</label>
                 <div style="width:60%;display:flex;gap:6px;">
-                    <input type="number" step="any" wire:model.live.debounce.400ms="allowances.{{ $index }}">
+                    <input type="number" step="any" wire:model.live.debounce.900ms="allowances.{{ $index }}"
+                      placeholder="Enter allowance"
+                    >
 
                     <button type="button" wire:click="removeAllowance({{ $index }})" class="btn-main">
                         X
@@ -166,6 +174,7 @@
                 </div>
             </div>
             @endforeach
+
 
         </form>
 
@@ -178,6 +187,7 @@
 
         <!-- RESULTS -->
         <div id="result">
+        <div  id="download-section">
 
             <div class="result-detail">
                 <strong>
@@ -258,10 +268,14 @@
         </div>
         @endif
 
-
+           </div>
         <!-- View Counter -->
         <div class="view-count">
-            <span>Calculator Uses</span>
+            <span> <i class="fa fa-calculator" style="color: #D36314; font-size: 14px;"></i>
+                <!-- Calculator Icon --></span>
+            {{-- <h4 style="font-weight: bold; margin: 0;">
+                <i class="fa fa-calculator" style="color: #D36314; font-size: 14px;"></i> <!-- Calculator Icon -->
+            </h4> --}}
             <span>
                 @if($new >= 1000000)
                 {{ number_format($new/1000000,1).'M' }}
@@ -269,7 +283,7 @@
                 {{ number_format($new/1000,1).'K' }}
                 @else
                 {{ $new }}
-                
+
                 @endif
             </span>
         </div>
@@ -297,7 +311,8 @@
                             <h5 class="modal-title">
                                 Tanzania Tax Rates & Deductions
                             </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
 
                         <!-- BODY -->
@@ -389,7 +404,7 @@
                             <h6 class="fw-bold">Additional Deductions</h6>
 
                             <p>
-                                <strong>SSF:</strong>
+                                <strong>SSC:</strong>
                                 20% of gross salary (10% employee, 10% employer).
                             </p>
 
@@ -422,9 +437,32 @@
 
 
 <script>
-    function downloadPDF(){
+    {{--  function downloadPDF(){
     html2pdf().from(document.getElementById("result"))
               .save("salary_"+Date.now()+".pdf");
+}  --}}
+             function downloadPDF() {
+    const element = document.getElementById("result");
+    const downloadSection = document.getElementById("download-section");
+
+    // Show the download section before generating the PDF
+    downloadSection.style.display = "block";
+
+    // Generate a unique filename with a timestamp
+    const uniqueFilename = `salary_estimation_${new Date().getTime()}.pdf`;
+
+    html2pdf(element, {
+        margin: 10,
+        filename: uniqueFilename,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+    }).then(() => {
+        // Hide the section again after a short delay (ensures it's captured in the PDF)
+        setTimeout(() => {
+            downloadSection.style.display = "none";
+        }, 1000);
+    });
 }
 
 function shareWhatsApp(){
@@ -436,4 +474,13 @@ function shareWhatsApp(){
 function openTaxModal(){
     new bootstrap.Modal(document.getElementById('taxModal')).show();
 }
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(btn => {
+            btn.addEventListener("click", function () {
+                let modal = bootstrap.Modal.getInstance(document.getElementById('taxModal'));
+                if (modal) modal.hide();
+            });
+        });
+    });
+
 </script>
