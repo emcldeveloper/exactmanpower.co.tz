@@ -39,13 +39,30 @@ $usageTotal = SalaryInsightLog::count();
     }
 
     /* Ensure equal alignment */
+
     .salary-section .row {
-        align-items: flex-start;
+        align-items: flex-start !important;
     }
 
-    .app-button-link {
-        margin-top: 10px !important;
+    /* Reduce space between slider & button */
+    .salaryCarousel {
+        margin-bottom: 5px !important;
+        /* adjust: 0px–10px */
     }
+
+    /* Remove extra space around images */
+    .salaryCarousel .carousel-item img {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        display: block;
+    }
+
+    /* Remove default spacing for app-button-link */
+    .app-button-link {
+        margin-top: 5px !important;
+        /* SMALL GAP */
+    }
+
 
     /* Responsive spacing */
     @media (max-width: 991px) {
@@ -59,7 +76,7 @@ $usageTotal = SalaryInsightLog::count();
 
         .app-button-link img {
             height: 130px;
-            margin-bottom: 10px;
+            // margin-bottom: 10px;
         }
     }
 
@@ -232,8 +249,14 @@ $usageTotal = SalaryInsightLog::count();
                         // Initial symbol & multiplier (JS will override)
                         $symbol = 'TZS';
                         @endphp
-
-                        <!-- RESULTS -->
+                            <!-- ERROR BOX -->
+                        <div id="error_box"
+                            style="display:none; background:#ffe5e5; color:#b30000;
+                                    border:1px solid #ffb3b3; padding:12px;
+                                    margin-bottom:15px; border-radius:6px;
+                                    font-weight:600;">
+                        </div>
+                         <!-- RESULTS -->
                         <div id="result">
                             <div id="download-section">
 
@@ -439,15 +462,15 @@ $usageTotal = SalaryInsightLog::count();
             {{-- RIGHT IMAGE SLIDER --}}
             <div class="col-lg-5">
 
-                <div id="salaryCarousel" class="carousel slide" data-ride="carousel">
+                <div id="salaryCarousel" class="carousel slide salaryCarousel" data-ride="carousel">
 
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img class="d-block w-100" src="{{ asset('img/calculator/home.jpeg') }}" alt="Salary App">
+                            <img class="d-block w-100" src="{{ asset('img/calculator/fist_last.jpeg') }}" alt="Salary App">
                         </div>
 
                         <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset('img/calculator/ehrm.jpeg') }}" alt="Salary App">
+                            <img class="d-block w-100" src="{{ asset('img/calculator/FIST.jpeg') }}" alt="Salary App">
                         </div>
 
                         <div class="carousel-item">
@@ -460,22 +483,22 @@ $usageTotal = SalaryInsightLog::count();
                                 alt="Salary App">
                         </div>
 
-                        <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset('img/calculator/end.jpeg') }}" alt="Salary App">
-                        </div>
+                        {{--  <div class="carousel-item">
+                            <img class="d-block w-100" src="{{ asset('img/calculator/fist_last.jpeg') }}" alt="Salary App">
+                        </div>  --}}
                     </div>
 
                     <a class="carousel-control-prev" href="#salaryCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon custom-carousel-icon"></span>
+                        <span class="carousel-control-prev-icon"></span>
                     </a>
 
                     <a class="carousel-control-next" href="#salaryCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon custom-carousel-icon"></span>
+                        <span class="carousel-control-next-icon"></span>
                     </a>
 
                 </div>
 
-                <div class="app-button-link">
+                <div class="app-button-link  text-center">
                     <a href="https://play.google.com/store/apps/details?id=com.exactmanpower.emsalarycalculator"
                         target="_blank">
                         <img src="{{ asset('img/calculator/playstore.png') }}" alt="Play Store">
@@ -485,6 +508,7 @@ $usageTotal = SalaryInsightLog::count();
                         <img src="{{ asset('img/calculator/appstore.png') }}" alt="App Store">
                     </a>
                 </div>
+
 
             </div>
 
@@ -601,7 +625,21 @@ function onSalaryTypeChange() {
                 currencyType: currency,
                 exchangeRate: exchange
             },
-           success: function (res) {
+            success: function (res) {
+
+                if (res.error) {
+    $('#error_box')
+        .text(res.message)
+        .fadeIn();
+
+    clearResults();
+    $('#basic_pay').val('');
+    //$('#net_pay').val('');
+    return;
+}
+
+// hide error when good
+$('#error_box').hide();
     var symbol     = getSymbol();
     var multiplier = (period === 'annual') ? 12 : 1;
 

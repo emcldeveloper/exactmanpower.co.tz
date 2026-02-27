@@ -17,15 +17,15 @@ class SalaryAjaxController extends Controller
         $period       = $request->period ?? 'monthly';
 
         $basic_pay    = $request->basic_pay !== null && $request->basic_pay !== ''
-                        ? floatval($request->basic_pay) : null;
+            ? floatval($request->basic_pay) : null;
 
         $net_pay      = $request->net_pay !== null && $request->net_pay !== ''
-                        ? floatval($request->net_pay) : null;
+            ? floatval($request->net_pay) : null;
 
         $allowances   = $request->allowances ?? [];
         $allowances   = array_filter(array_map(function ($v) {
-                            return ($v === null || $v === '') ? null : floatval($v);
-                        }, $allowances));
+            return ($v === null || $v === '') ? null : floatval($v);
+        }, $allowances));
 
         $total_allowance = array_sum($allowances);
 
@@ -82,7 +82,17 @@ class SalaryAjaxController extends Controller
             }
 
             $total_gross = $gross;
-            $basic_pay = $total_gross - $total_allowance;
+            $basic_pay   = $total_gross - $total_allowance;
+
+            // ❗ Validation: Prevent incorrect salary input
+            if ($total_allowance >= $total_gross) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Validation error: When the net salary is fixed in the configuration,
+                     total allowances must not exceed the basic salary. Please adjust the allowance
+                      amounts as necessary.'
+                ]);
+            }
         }
 
         // ======================
@@ -97,36 +107,36 @@ class SalaryAjaxController extends Controller
         // Log user usage (INSIGHT)
         // ======================
         $agent = new Agent();
-  // Get previous salary type from session
-$previousType = session('last_salary_type');
+        // Get previous salary type from session
+        $previousType = session('last_salary_type');
 
-// Save current for next time
-session(['last_salary_type' => $salaryType]);
+        // Save current for next time
+        session(['last_salary_type' => $salaryType]);
 
-// Log ONLY if type changed
-$shouldLog = ($previousType !== $salaryType) && !empty($salaryType);
+        // Log ONLY if type changed
+        $shouldLog = ($previousType !== $salaryType) && !empty($salaryType);
 
-if ($shouldLog) {
+        if ($shouldLog) {
 
-    $agent = new Agent();
+            $agent = new Agent();
 
-    SalaryInsightLog::create([
-        "salary_type"   => $salaryType,
-        "currency"      => $currency,
-        "period"        => $period,
-        "input_amount"  => $salaryType === "net" ? ($net_pay ?? 0) : ($basic_pay ?? 0),
-        "gross_amount"  => $total_gross,
-        "net_amount"    => $net,
-        "ip_address"    => request()->ip(),
-        "user_agent"    => request()->userAgent(),
-        "device"        => $agent->device(),
-        "os"            => $agent->platform(),
-        "browser"       => $agent->browser(),
-        "hour"          => now()->format('H'),
-        "day"           => now()->format('l'),
-    ]);
-}
-      
+            SalaryInsightLog::create([
+                "salary_type"   => $salaryType,
+                "currency"      => $currency,
+                "period"        => $period,
+                "input_amount"  => $salaryType === "net" ? ($net_pay ?? 0) : ($basic_pay ?? 0),
+                "gross_amount"  => $total_gross,
+                "net_amount"    => $net,
+                "ip_address"    => request()->ip(),
+                "user_agent"    => request()->userAgent(),
+                "device"        => $agent->device(),
+                "os"            => $agent->platform(),
+                "browser"       => $agent->browser(),
+                "hour"          => now()->format('H'),
+                "day"           => now()->format('l'),
+            ]);
+        }
+
 
         $usage_count = SalaryInsightLog::count();
 
