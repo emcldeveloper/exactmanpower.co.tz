@@ -134,7 +134,7 @@
             @if($salaryType === 'net')
             <div class="form-row">
                 <label>Net Salary</label>
-                <input type="text" step="any" wire:model.live.debounce.900ms="net_pay" wire:keyup="typing('net_pay')"
+                <input type="text" step="any" wire:model.live.debounce.750ms="net_pay" wire:keyup="typing('net_pay')"
                     wire:keydown="activeField = 'net_pay'"
                   placeholder="Enter net salary"
                     >
@@ -145,7 +145,7 @@
             @if($salaryType === 'gross')
             <div class="form-row">
                 <label>Basic Salary</label>
-                <input type="text"  wire:model.live.debounce.900ms="basic_pay"
+                <input type="text"  wire:model.live.debounce.750ms="basic_pay"
                     wire:keyup="typing('basic_pay')" wire:keydown="activeField = 'basic_pay'"
                    placeholder="Enter basic salary"
                     >
@@ -164,7 +164,7 @@
             <div class="form-row" wire:key="allowance-{{ $index }}">
                 <label>Allowance {{ $index + 1 }}</label>
                 <div style="width:60%;display:flex;gap:6px;">
-                    <input type="number" step="any" wire:model.live.debounce.900ms="allowances.{{ $index }}"
+                    <input type="number" step="any" wire:model.live.debounce.750ms="allowances.{{ $index }}"
                       placeholder="Enter allowance"
                     >
 

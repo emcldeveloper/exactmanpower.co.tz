@@ -17,7 +17,8 @@ Route::middleware(['auth'])->get('logout', 'Auth\LoginController@logout');
 
 Route::post('password/change', 'Auth\LoginController@reset_password')->name('store_new_password');
 use App\Http\Controllers\Admin\Calcultor\SalaryCalculatorController;
- 
+use App\Http\Controllers\Website\SalaryAjaxController as WebsiteSalaryAjaxController;
+
 // retrieve home page
 Route::group(['namespace'=>'Website', 'middleware' => []], function () { 
     // Basi routes
@@ -30,6 +31,11 @@ Route::group(['namespace'=>'Website', 'middleware' => []], function () {
     Route::get('team/{slug}', 'HomeController@team_single');
     Route::get('contact', 'HomeController@contact');
     Route::get('exactehrm/payrollite/salary-calculator', 'SalaryCalculatorController@index');
+    Route::post('/calc-salary', [SalaryAjaxController::class, 'calculate']);
+   
+
+Route::post('/salary/calc', [WebsiteSalaryAjaxController::class, 'calculate'])
+    ->name('salary.calc');
 
     Route::get('approach/{approach}', 'ApproachController@ad_hoc_hr_services');
     Route::get('approach/out-sourced-hr-services', 'ApproachController@out_sourced_hr_services');
