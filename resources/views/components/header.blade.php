@@ -187,9 +187,9 @@
                               <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
                                 <a class="nav-link text-nowrap text-uppercase" href="https://ekazi.co.tz/" target="__blank" >Jobs</a>
                             </li>
-                            <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
+                            {{--  <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
                                 <a class="nav-link text-nowrap text-uppercase" href="#"  >Employer Zone</a>
-                            </li>
+                            </li>  --}}
                            
 
                             @foreach(App\Models\PostType::all() as $menu)
