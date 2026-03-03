@@ -247,6 +247,45 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-md-6 mt-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <span class="fw-semibold fs-5">
+                                <i class="bi bi-phone-fill me-2 text-info"></i>
+                                OS Usage Distribution
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4" style="height: 260px;">
+                            <canvas id="osChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4">
+                        <span class="fw-semibold fs-5">
+                            <i class="bi bi-browser-chrome me-2 text-danger"></i>
+                            Browser Usage Distribution
+                        </span>
+                    </div>
+                    <div class="card-body px-4 pb-4" style="height: 260px;">
+                        <canvas id="browserChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mt-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100">
+                    <div class="card-header bg-transparent border-0 pt-4 px-4">
+                        <span class="fw-semibold fs-5">
+                            <i class="bi bi-tablet-landscape me-2 text-success"></i>
+                            Device Usage Insights
+                        </span>
+                    </div>
+                    <div class="card-body px-4 pb-4" style="height: 260px;">
+                        <canvas id="deviceChart"></canvas>
+                    </div>
+                </div>
+            </div>
 
             </div>
 
@@ -447,6 +486,67 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
+    //os
+    new Chart(document.getElementById('osChart'), {
+    type: 'pie',
+    data: {
+        labels: @json($os_usage->pluck('os')),
+        datasets: [{
+            data: @json($os_usage->pluck('total')),
+            backgroundColor: ['#0d6efd','#198754','#dc3545','#ffc107','#6f42c1'],
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+//browser
+new Chart(document.getElementById('browserChart'), {
+    type: 'doughnut',
+    data: {
+        labels: @json($browser_usage->pluck('browser')),
+        datasets: [{
+            data: @json($browser_usage->pluck('total')),
+            backgroundColor: ['#0dcaf0','#6610f2','#fd7e14','#20c997','#dc3545'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+//device
+new Chart(document.getElementById('deviceChart'), {
+    type: 'bar',
+    data: {
+        labels: @json($device_usage->pluck('device')),
+        datasets: [{
+            label: 'Device Count',
+            data: @json($device_usage->pluck('total')),
+            backgroundColor: ['#198754','#0d6efd','#D36314'],
+            borderRadius: 8,
+            barPercentage: 0.5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true },
+            x: { grid: { display: false } }
+        }
+    }
+});
 
 });
 </script>

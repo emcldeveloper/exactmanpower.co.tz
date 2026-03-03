@@ -138,7 +138,10 @@ class SalaryCalculatorController extends Controller
             'usage_per_year',
             'start',
             'end',
-            'preset'
+            'preset',
+            'os_usage',
+            'device_usage',
+            'browser_usage',
         ));
     }
 }

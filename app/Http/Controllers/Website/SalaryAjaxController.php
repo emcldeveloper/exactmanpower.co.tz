@@ -8,6 +8,7 @@ use App\Models\SalaryInsightLog;
 use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
 
+
 class SalaryAjaxController extends Controller
 {
     public function calculate(Request $request)
@@ -120,6 +121,20 @@ class SalaryAjaxController extends Controller
 
             $agent = new Agent();
 
+
+            $agent = new Agent();
+
+
+
+            // IP location
+            $ip = request()->ip();
+            $geo = json_decode(file_get_contents("https://ipinfo.io/{$ip}/json"));
+
+            // Country + Region
+            $country = $geo->country ?? "Unknown";
+            $city    = $geo->city ?? "Unknown";
+
+
             SalaryInsightLog::create([
                 "salary_type"   => $salaryType,
                 "currency"      => $currency,
@@ -134,6 +149,8 @@ class SalaryAjaxController extends Controller
                 "browser"       => $agent->browser(),
                 "hour"          => now()->format('H'),
                 "day"           => now()->format('l'),
+                'country'       =>$country,
+                'city'        =>$city,
             ]);
         }
 
