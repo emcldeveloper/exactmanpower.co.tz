@@ -309,11 +309,11 @@ $usageTotal = SalaryInsightLog::count();
                                 <div class="full-line"></div>
 
                                 <!-- 4️⃣ NET SALARY -->
-                                <h4 style="margin-top:20px; border-bottom:3px solid #000; padding-bottom:5px;">
+                                <h4  style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
                                     Net Salary
                                 </h4>
 
-                                <div class="result-detail double-line">
+                                <div class="result-detail " style="margin-top:20px; border-bottom:3px solid #000; padding-bottom:5px;">
                                     <strong>Net Salary</strong>
                                     <strong id="net_display">{{ $symbol }} 0.00</strong>
                                 </div>
