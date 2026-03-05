@@ -277,7 +277,7 @@ $usageTotal = SalaryInsightLog::count();
                                     <span id="allowances_display">{{ $symbol }} 0.00</span>
                                 </div>
 
-                                <div class="full-line"></div>
+                                {{--  <div class="full-line"></div>  --}}
 
                                 <!-- 2️⃣ DEDUCTIONS -->
                                 <h4 style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
@@ -294,7 +294,7 @@ $usageTotal = SalaryInsightLog::count();
                                     <span id="paye_display">{{ $symbol }} 0.00</span>
                                 </div>
 
-                                <div class="full-line"></div>
+                                {{--  <div class="full-line"></div>  --}}
 
                                 <!-- 3️⃣ TOTAL DEDUCTIONS -->
                                 <h4 style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
