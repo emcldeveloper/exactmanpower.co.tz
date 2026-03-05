@@ -142,13 +142,13 @@ $usageTotal = SalaryInsightLog::count();
 
     .salary-calculator-wrapper .full-line {
         border-top: 1px solid #000;
-        border-bottom: 1px dotted #000;
+      //  border-bottom: 1px dotted #000;
         padding: 6px 0;
     }
 
     .salary-calculator-wrapper .double-line {
-        border-top: 2px solid #000;
-        border-bottom: 3px double #000;
+       // border-top: 2px solid #000;
+       border-bottom: 1px double #000;
         padding: 6px 0;
     }
 
