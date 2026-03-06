@@ -36,10 +36,7 @@
                         <label class="form-label fw-semibold text-muted small text-uppercase mb-2">
                             <i class="bi bi-calendar-start me-1"></i>From Date
                         </label>
-                        <input
-                            type="date"
-                            name="start_date"
-                            value="{{ $start }}"
+                        <input type="date" name="start_date" value="{{ $start }}"
                             class="form-control form-control-lg rounded-3 border-0 bg-light">
                     </div>
 
@@ -47,10 +44,7 @@
                         <label class="form-label fw-semibold text-muted small text-uppercase mb-2">
                             <i class="bi bi-calendar-end me-1"></i>To Date
                         </label>
-                        <input
-                            type="date"
-                            name="end_date"
-                            value="{{ $end }}"
+                        <input type="date" name="end_date" value="{{ $end }}"
                             class="form-control form-control-lg rounded-3 border-0 bg-light">
                     </div>
 
@@ -62,29 +56,29 @@
                 </div>
 
                 {{-- Quick presets --}}
-                {{--  <div class="mt-3 d-flex flex-wrap gap-2">
+                {{-- <div class="mt-3 d-flex flex-wrap gap-2">
                     <span class="text-muted small me-2">Quick ranges:</span>
 
                     <a href="{{ route('admin.calculator.index', ['preset' => 'last7']) }}"
-                       class="btn btn-sm {{ ($preset ?? '') === 'last7' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                        class="btn btn-sm {{ ($preset ?? '') === 'last7' ? 'btn-primary' : 'btn-outline-secondary' }}">
                         Last 7 days
                     </a>
 
                     <a href="{{ route('admin.calculator.index', ['preset' => 'last30']) }}"
-                       class="btn btn-sm {{ ($preset ?? '') === 'last30' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                        class="btn btn-sm {{ ($preset ?? '') === 'last30' ? 'btn-primary' : 'btn-outline-secondary' }}">
                         Last 30 days
                     </a>
 
                     <a href="{{ route('admin.calculator.index', ['preset' => 'last90']) }}"
-                       class="btn btn-sm {{ ($preset ?? '') === 'last90' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                        class="btn btn-sm {{ ($preset ?? '') === 'last90' ? 'btn-primary' : 'btn-outline-secondary' }}">
                         Last 90 days
                     </a>
 
                     <a href="{{ route('admin.calculator.index', ['preset' => 'ytd']) }}"
-                       class="btn btn-sm {{ ($preset ?? '') === 'ytd' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                        class="btn btn-sm {{ ($preset ?? '') === 'ytd' ? 'btn-primary' : 'btn-outline-secondary' }}">
                         Year to date
                     </a>
-                </div>  --}}
+                </div> --}}
             </form>
 
             {{-- ========================= --}}
@@ -134,7 +128,7 @@
                                         <i class="bi bi-star-fill me-1 text-warning"></i>Most Popular Type
                                     </span>
                                     @php
-                                        $topType = $salary_type_usage->sortByDesc('total')->first();
+                                    $topType = $salary_type_usage->sortByDesc('total')->first();
                                     @endphp
                                     <h3 class="fw-bold mb-0">
                                         {{ $topType->salary_type ?? 'N/A' }}
@@ -164,7 +158,7 @@
                                         <i class="bi bi-globe2 me-1"></i>Top Currency
                                     </span>
                                     @php
-                                        $topCurrency = $currency_usage->sortByDesc('total')->first();
+                                    $topCurrency = $currency_usage->sortByDesc('total')->first();
                                     @endphp
                                     <h3 class="fw-bold mb-0">
                                         {{ $topCurrency->currency ?? 'N/A' }}
@@ -197,16 +191,21 @@
                                 </span>
 
                                 <div class="btn-group bg-light rounded-3 p-1" role="group">
-                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn active" data-period="daily">
+                                    <button type="button"
+                                        class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn active"
+                                        data-period="daily">
                                         <i class="bi bi-sun me-1"></i>Daily
                                     </button>
-                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn" data-period="weekly">
+                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn"
+                                        data-period="weekly">
                                         <i class="bi bi-calendar-week me-1"></i>Weekly
                                     </button>
-                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn" data-period="monthly">
+                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn"
+                                        data-period="monthly">
                                         <i class="bi bi-calendar-month me-1"></i>Monthly
                                     </button>
-                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn" data-period="yearly">
+                                    <button type="button" class="btn btn-sm px-3 py-1 rounded-3 border-0 trend-btn"
+                                        data-period="yearly">
                                         <i class="bi bi-calendar-year me-1"></i>Yearly
                                     </button>
                                 </div>
@@ -261,31 +260,57 @@
                     </div>
                 </div>
                 <div class="col-md-6 mt-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-transparent border-0 pt-4 px-4">
-                        <span class="fw-semibold fs-5">
-                            <i class="bi bi-browser-chrome me-2 text-danger"></i>
-                            Browser Usage Distribution
-                        </span>
-                    </div>
-                    <div class="card-body px-4 pb-4" style="height: 260px;">
-                        <canvas id="browserChart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mt-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-header bg-transparent border-0 pt-4 px-4">
-                        <span class="fw-semibold fs-5">
-                            <i class="bi bi-tablet-landscape me-2 text-success"></i>
-                            Device Usage Insights
-                        </span>
-                    </div>
-                    <div class="card-body px-4 pb-4" style="height: 260px;">
-                        <canvas id="deviceChart"></canvas>
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <span class="fw-semibold fs-5">
+                                <i class="bi bi-browser-chrome me-2 text-danger"></i>
+                                Browser Usage Distribution
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4" style="height: 260px;">
+                            <canvas id="browserChart"></canvas>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-md-6 mt-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <span class="fw-semibold fs-5">
+                                <i class="bi bi-tablet-landscape me-2 text-success"></i>
+                                Device Usage Insights
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4" style="height: 260px;">
+                            <canvas id="deviceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <span class="fw-semibold fs-5">
+                                <i class="bi bi-globe-americas me-2 text-primary"></i>
+                                Country Usage Distribution
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4" style="height:260px;">
+                            <canvas id="countryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mt-4">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-header bg-transparent border-0 pt-4 px-4">
+                            <span class="fw-semibold fs-5">
+                                <i class="bi bi-geo-alt-fill me-2 text-danger"></i>
+                                City Usage Distribution
+                            </span>
+                        </div>
+                        <div class="card-body px-4 pb-4" style="height:260px;">
+                            <canvas id="cityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
@@ -310,7 +335,7 @@
 {{-- CHART JS --}}
 {{-- ========================= --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
 
     // ---- Trend Data from backend ----
     const trendData = {
@@ -505,6 +530,50 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+// country
+new Chart(document.getElementById('countryChart'), {
+    type: 'doughnut',
+    data: {
+        labels: @json($country_usage->pluck('country')),
+        datasets: [{
+            data: @json($country_usage->pluck('total')),
+            backgroundColor: ['#0d6efd','#198754','#ffc107','#dc3545','#6610f2','#fd7e14'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+});
+//city
+new Chart(document.getElementById('cityChart'), {
+    type: 'bar',
+    data: {
+        labels: @json($city_usage->pluck('city')),
+        datasets: [{
+            label: 'City Usage',
+            data: @json($city_usage->pluck('total')),
+            backgroundColor: '#D36314',
+            borderRadius: 8,
+            barPercentage: 0.5
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true },
+            x: { grid: { display: false } }
+        }
+    }
+});
 //browser
 new Chart(document.getElementById('browserChart'), {
     type: 'doughnut',
@@ -552,29 +621,34 @@ new Chart(document.getElementById('deviceChart'), {
 </script>
 
 <style>
-.card {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 1rem 2rem rgba(0,0,0,.08) !important;
-}
-.trend-btn {
-    background: transparent;
-    color: #6c757d;
-    transition: all 0.2s;
-}
-.trend-btn:hover {
-    background: rgba(211, 99, 20, 0.1);
-    color: #D36314;
-}
-.trend-btn.active {
-    background: #D36314 !important;
-    color: white !important;
-}
-.btn-group {
-    background: #f8f9fa;
-}
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, .08) !important;
+    }
+
+    .trend-btn {
+        background: transparent;
+        color: #6c757d;
+        transition: all 0.2s;
+    }
+
+    .trend-btn:hover {
+        background: rgba(211, 99, 20, 0.1);
+        color: #D36314;
+    }
+
+    .trend-btn.active {
+        background: #D36314 !important;
+        color: white !important;
+    }
+
+    .btn-group {
+        background: #f8f9fa;
+    }
 </style>
 
 @endsection

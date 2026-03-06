@@ -84,6 +84,14 @@ class SalaryCalculatorController extends Controller
             ->selectRaw('browser, COUNT(*) as total')
             ->groupBy('browser')
             ->get();
+        $country_usage = (clone $baseQuery)
+            ->selectRaw('country, COUNT(*) as total')
+            ->groupBy('country')
+            ->get();
+        $city_usage = (clone $baseQuery)
+            ->selectRaw('city, COUNT(*) as total')
+            ->groupBy('city')
+            ->get();
 
         // -----------------------------
         // 4. TREND DATA
@@ -142,6 +150,8 @@ class SalaryCalculatorController extends Controller
             'os_usage',
             'device_usage',
             'browser_usage',
+            'city_usage',
+            'country_usage',
         ));
     }
 }
