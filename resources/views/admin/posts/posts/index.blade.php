@@ -15,6 +15,7 @@
                     <?php 
                         $var = \App\Models\PostViewType::where('user_id', Auth::user()->id)->latest()->first();
                      ?>
+                     
                      {{\App\Models\PostViewType::where('user_id', Auth::user()->id)->latest()->first()->status == 1 ? "Grid" : 'List'}}
                  </a>
                     
