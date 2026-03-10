@@ -18,6 +18,7 @@ Route::middleware(['auth'])->get('logout', 'Auth\LoginController@logout');
 Route::post('password/change', 'Auth\LoginController@reset_password')->name('store_new_password');
 use App\Http\Controllers\Admin\Calcultor\SalaryCalculatorController;
 use App\Http\Controllers\Website\SalaryAjaxController as WebsiteSalaryAjaxController;
+use App\Http\Controllers\Admin\InsightCalculator\SalaryInsightController;
 
 // retrieve home page
 Route::group(['namespace'=>'Website', 'middleware' => []], function () { 
@@ -181,7 +182,18 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware' => ['account
     //End routes for home page edit
 
 
+//............................... start insight calvulator.............................//
 
+    Route::group(['prefix'=>'calculator', 'namespace'=>'Calculator'], function () {
+        
+        
+        Route::middleware(['admin'])->get('/insightLogs/list', [SalaryInsightController::class ,'insight']);     
+        Route::middleware(['admin'])->get('/taxRate/show', [SalaryInsightController::class ,'taxrate']);
+        Route::middleware(['admin'])->put('/taxRate/update/{id}', [SalaryInsightController::class ,'update']);
+   
+        
+    });
+//................................ End of insight.......................................//
 
     // -------------------- Start routes for module Tag --------------------- //
     Route::group(['prefix'=>'tags', 'namespace'=>'Tag'], function () {

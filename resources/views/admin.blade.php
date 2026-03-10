@@ -161,17 +161,28 @@
                     </a>
 
                     <ul class="sub">
-                        <li class="{{ Request::is('admin/calculator/*') ? 'active' : '' }}">
+
+                        <li class="{{ request()->is('admin/calculator/analytics*') ? 'active' : '' }}">
                             <a href="{{ url('admin/calculator/analytics') }}" class="nav-link">
-                                <i class="icon-arrow-right"></i><span>Analytics</span>
+                                <i class="icon-arrow-right"></i>
+                                <span>Analytics</span>
                             </a>
                         </li>
 
-                        <li class="{{ Request::is('admin/tags/tag-types/*') ? 'active' : '' }}">
-                            <a href="{{ url('admin/tags/tag-types/list') }}" class="nav-link">
-                                <i class="icon-arrow-right"></i><span>Tax Rate</span>
+                        <li class="{{ request()->is('admin/calculator/insightLogs*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/calculator/insightLogs/list') }}" class="nav-link">
+                                <i class="icon-arrow-right"></i>
+                                <span>Insight Logs</span>
                             </a>
                         </li>
+
+                        <li class="{{ request()->is('admin/calculator/taxRate*') ? 'active' : '' }}">
+                            <a href="{{ url('admin/calculator/taxRate/show') }}" class="nav-link">
+                                <i class="icon-arrow-right"></i>
+                                <span>Tax Rate</span>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 
