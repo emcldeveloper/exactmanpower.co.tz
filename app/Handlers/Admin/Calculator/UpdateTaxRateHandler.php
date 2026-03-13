@@ -25,7 +25,15 @@ class UpdateTaxRateHandler
     {
         $taxrate = PayCalculator::findOrFail($id);
 
-        $taxrate->update($request->except(['_token', '_method']));
+        $data = $request->except(['_token', '_method']);
+
+        // Convert percentage to decimal
+        $data['payone_percentage'] = $request->payone_percentage / 100;
+        $data['paytwo_percentage'] = $request->paytwo_percentage / 100;
+        $data['paythree_percentage'] = $request->paythree_percentage / 100;
+        $data['payfour_percentage'] = $request->payfour_percentage / 100;
+
+        $taxrate->update($data);
 
         return back()->with('alert-success', 'Tax rate updated successfully');
     }

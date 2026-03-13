@@ -11,13 +11,23 @@ class UpdateForeignKeyPostCommentsTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
-        Schema::table('post_comments', function (Blueprint $table) {
-            $table->foreign('post_id')->references('post_id')->on('posts');
-            $table->foreign('parent_post_comment_id')->references('post_comment_id')->on('post_comments');
-        });
-    }
+   public function up()
+{
+    Schema::table('post_comments', function (Blueprint $table) {
+
+        $table->dropForeign(['post_id']);
+        $table->dropForeign(['parent_post_comment_id']);
+
+        $table->foreign('post_id')
+              ->references('post_id')
+              ->on('posts');
+
+        $table->foreign('parent_post_comment_id')
+              ->references('post_comment_id')
+              ->on('post_comments');
+
+    });
+}
 
     /**
      * Reverse the migrations.

@@ -190,7 +190,9 @@ Route::group(['prefix'=>'admin', 'namespace'=>'Admin', 'middleware' => ['account
         Route::middleware(['admin'])->get('/insightLogs/list', [SalaryInsightController::class ,'insight']);     
         Route::middleware(['admin'])->get('/taxRate/show', [SalaryInsightController::class ,'taxrate']);
         Route::middleware(['admin'])->put('/taxRate/update/{id}', [SalaryInsightController::class ,'update']);
-   
+        Route::middleware(['admin'])->post('/tax-rate/confirm-password',[SalaryInsightController::class,'confirmPassword']);
+        Route::middleware(['admin'])->post('/tax-rate/create-password',[SalaryInsightController::class,'accesspassword']);
+ 
         
     });
 //................................ End of insight.......................................//
