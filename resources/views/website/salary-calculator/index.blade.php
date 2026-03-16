@@ -142,13 +142,13 @@ $usageTotal = SalaryInsightLog::count();
 
     .salary-calculator-wrapper .full-line {
         border-top: 1px solid #000;
-      //  border-bottom: 1px dotted #000;
+        //  border-bottom: 1px dotted #000;
         padding: 6px 0;
     }
 
     .salary-calculator-wrapper .double-line {
-       // border-top: 2px solid #000;
-       border-bottom: 1px double #000;
+        // border-top: 2px solid #000;
+        border-bottom: 1px double #000;
         padding: 6px 0;
     }
 
@@ -277,7 +277,7 @@ $usageTotal = SalaryInsightLog::count();
                                     <span id="allowances_display">{{ $symbol }} 0.00</span>
                                 </div>
 
-                                {{--  <div class="full-line"></div>  --}}
+                                {{-- <div class="full-line"></div> --}}
 
                                 <!-- 2️⃣ DEDUCTIONS -->
                                 <h4 style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
@@ -294,7 +294,7 @@ $usageTotal = SalaryInsightLog::count();
                                     <span id="paye_display">{{ $symbol }} 0.00</span>
                                 </div>
 
-                                {{--  <div class="full-line"></div>  --}}
+                                {{-- <div class="full-line"></div> --}}
 
                                 <!-- 3️⃣ TOTAL DEDUCTIONS -->
                                 <h4 style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
@@ -309,11 +309,12 @@ $usageTotal = SalaryInsightLog::count();
                                 <div class="full-line"></div>
 
                                 <!-- 4️⃣ NET SALARY -->
-                                <h4  style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
+                                <h4 style="margin-top:20px; border-bottom:2px solid #ccc; padding-bottom:5px;">
                                     Net Salary
                                 </h4>
 
-                                <div class="result-detail " style="margin-top:20px; border-bottom:3px solid #000; padding-bottom:5px;">
+                                <div class="result-detail "
+                                    style="margin-top:20px; border-bottom:3px solid #000; padding-bottom:5px;">
                                     <strong>Net Salary</strong>
                                     <strong id="net_display">{{ $symbol }} 0.00</strong>
                                 </div>
@@ -476,124 +477,140 @@ $usageTotal = SalaryInsightLog::count();
                         @endif
 
                     </div>
-                    <div id="salarySlip" style="display:none; background:white; padding:18px; font-family:Arial; font-size:13px;">
+                    <div id="salarySlip"
+                        style="display:none; background:white; padding:18px; font-family:Arial; font-size:13px;">
 
-                    <!-- COMPANY LOGO + TITLE -->
-                    <div style="text-align:center; margin-bottom:10px;">
-                        <img id="slip_logo" src="{{ url('/img/calculator/ExactEHRMLOGO.png') }}" height="60">
-                        <div style="font-size:18px; font-weight:800; color:#D36314; margin-top:6px;">Salary Slip</div>
+                        <!-- COMPANY LOGO + TITLE -->
+                        <div style="text-align:center; margin-bottom:10px;">
+                            <img id="slip_logo" src="{{ url('/img/calculator/ExactEHRMLOGO.png') }}" height="60">
+                            <div style="font-size:18px; font-weight:800; color:#D36314; margin-top:6px;">Salary Slip
+                            </div>
 
-                        <!-- HEADER SECTION -->
-                <div style="margin-bottom:15px; width:100%; display:flex;">
+                            <!-- HEADER SECTION -->
+                            <div style="margin-bottom:15px; width:100%; display:flex;">
 
-                    <!-- LEFT: EMPLOYEE INFORMATION -->
-                    <div style="width:60%; text-align:left; line-height:1.4;">
-                        <div id="slip_name" 
-                            style="font-size:14px; font-weight:700; margin-bottom:3px;">
+                                <!-- LEFT: EMPLOYEE INFORMATION -->
+                                <div style="width:60%; text-align:left; line-height:1.4;">
+                                    <div id="slip_name" style="font-size:14px; font-weight:700; margin-bottom:3px;">
+                                    </div>
+
+                                    <div id="slip_department" style="font-size:12px; color:#444;"></div>
+                                    <div id="slip_emp_number" style="font-size:12px; color:#444;"></div>
+                                    <div id="slip_phone" style="font-size:12px; color:#444;"></div>
+                                    <div id="slip_email" style="font-size:12px; color:#444;"></div>
+
+                                    <!-- NEW: PAY DATE -->
+                                    <div id="slip_pay_date" style="font-size:12px; color:#444; margin-top:4px;">
+                                    </div>
+                                </div>
+
+                                <!-- RIGHT: LOGO & TITLE -->
+                                {{-- <div style="width:40%; text-align:center;">
+                                    <img id="slip_logo" src="{{ url('/img/calculator/ExactEHRMLOGO.png') }}"
+                                        height="60">
+
+                                    <div style="font-size:17px; font-weight:800; color:#D36314; margin-top:5px;">
+                                        Salary Slip
+                                    </div>
+                                </div> --}}
+
+                            </div>
+
                         </div>
 
-                        <div id="slip_department" style="font-size:12px; color:#444;"></div>
-                        <div id="slip_emp_number" style="font-size:12px; color:#444;"></div>
-                        <div id="slip_phone" style="font-size:12px; color:#444;"></div>
-                        <div id="slip_email" style="font-size:12px; color:#444;"></div>
+                        <!-- MAIN 4-COLUMN TABLE -->
+                        <table style="width:100%; border-collapse:collapse; margin-top:15px; font-size:13px;">
+                            <thead>
+                                <tr style="background:#f3f3f3; border-bottom:2px solid #ccc;">
+                                    <th style="padding:8px; text-align:left;">Earning</th>
+                                    <th style="padding:8px; text-align:right;">Amount</th>
 
-                        <!-- NEW: PAY DATE -->
-                        <div id="slip_pay_date" 
-                            style="font-size:12px; color:#444; margin-top:4px;">
+                                    <!-- SPACE COLUMN -->
+                                    <th style="width:40px;"></th>
+
+                                    <th style="padding:8px; text-align:left;">Deduction</th>
+                                    <th style="padding:8px; text-align:right;">Amount</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td style="padding:8px;">Basic Salary</td>
+                                    <td style="padding:8px; text-align:right;" id="slip_basic">0.00</td>
+
+                                    <td></td>
+
+                                    <td style="padding:8px;">SSC (Employee)</td>
+                                    <td style="padding:8px; text-align:right;" id="slip_ssc">0.00</td>
+                                </tr>
+
+                                <tr>
+                                    <td style="padding:8px;">Allowances</td>
+                                    <td style="padding:8px; text-align:right;" id="slip_allowances">0.00</td>
+
+                                    <td></td>
+
+                                    <td style="padding:8px;">PAYE</td>
+                                    <td style="padding:8px; text-align:right;" id="slip_paye">0.00</td>
+                                </tr>
+
+                                <!-- spacer -->
+                                <tr>
+                                    <td colspan="5" style="padding:5px;"></td>
+                                </tr>
+
+                                <!-- totals -->
+                                <tr style="border-top:2px solid #000;">
+                                    <td style="padding:8px; font-weight:bold;">Total Earnings</td>
+                                    <td style="padding:8px; text-align:right; font-weight:bold;"
+                                        id="slip_total_earnings">0.00</td>
+
+                                    <td></td>
+
+                                    <td style="padding:8px; font-weight:bold;">Total Deductions</td>
+                                    <td style="padding:8px; text-align:right; font-weight:bold;"
+                                        id="slip_total_deductions">0.00</td>
+                                </tr>
+
+                                <tr style="border-top:2px solid #000; border-bottom:3px double #000;">
+                                    <td style="padding:8px; font-weight:bold; font-size:14px;">Net Salary</td>
+                                    <td style="padding:8px; text-align:right; font-weight:bold; font-size:14px;"
+                                        id="slip_net">0.00</td>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        <!-- SIGNATURE SECTION -->
+                        <table style="width:100%; margin-top:25px; font-size:12px;">
+                            <tr>
+                                <td style="padding:10px;">
+                                    <strong>Employee Signature:</strong>
+                                    <div style="border-bottom:1px solid #000; height:22px; width:90%;"></div>
+                                </td>
+                                <td style="padding:10px;">
+                                    <strong>Employer Signature:</strong>
+                                    <div style="border-bottom:1px solid #000; height:22px; width:90%;"></div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- COMPANY ADDRESS -->
+                        {{-- <div id="slip_address"
+                            style="text-align:center; margin-top:12px; font-size:11px; color:#666;">
+                        </div> --}}
+
+                        <!-- FOOTER -->
+                        <div style="margin-top:10px; text-align:center; font-size:11px; color:#777;">
+                            Powered by ExactEHRM — {{ date('Y') }}
                         </div>
+
                     </div>
-
-                    <!-- RIGHT: LOGO & TITLE -->
-                    {{--  <div style="width:40%; text-align:center;">
-                        <img id="slip_logo" 
-                            src="{{ url('/img/calculator/ExactEHRMLOGO.png') }}" 
-                            height="60">
-
-                        <div style="font-size:17px; font-weight:800; color:#D36314; margin-top:5px;">
-                            Salary Slip
-                        </div>
-                    </div>  --}}
-
-                </div>
-
-    </div>
-
-    <!-- MAIN 4-COLUMN TABLE -->
-    <table style="width:100%; border-collapse:collapse; margin-top:10px; font-size:13px;">
-        <thead>
-            <tr style="background:#f3f3f3; border-bottom:2px solid #ccc;">
-                <th style="padding:6px; text-align:left;">Earning</th>
-                <th style="padding:6px; text-align:right;">Amount</th>
-                <th style="padding:6px; text-align:left;">Deduction</th>
-                <th style="padding:6px; text-align:right;">Amount</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            <tr>
-                <td style="padding:6px;">Basic Salary</td>
-                <td style="padding:6px; text-align:right;" id="slip_basic">0.00</td>
-
-                <td style="padding:6px;">SSC (Employee)</td>
-                <td style="padding:6px; text-align:right;" id="slip_ssc">0.00</td>
-            </tr>
-
-            <tr>
-                <td style="padding:6px;">Allowances</td>
-                <td style="padding:6px; text-align:right;" id="slip_allowances">0.00</td>
-
-                <td style="padding:6px;">PAYE</td>
-                <td style="padding:6px; text-align:right;" id="slip_paye">0.00</td>
-            </tr>
-
-            <!-- Spacer row -->
-            <tr><td colspan="4" style="padding:4px;"></td></tr>
-
-            <!-- Totals -->
-            <tr style="border-top:2px solid #000;">
-                <td style="padding:6px; font-weight:bold;">Total Earnings</td>
-                <td style="padding:6px; text-align:right; font-weight:bold;" id="slip_total_earnings">0.00</td>
-
-                <td style="padding:6px; font-weight:bold;">Total Deductions</td>
-                <td style="padding:6px; text-align:right; font-weight:bold;" id="slip_total_deductions">0.00</td>
-            </tr>
-
-            <!-- Net Salary -->
-            <tr style="border-top:2px solid #000; border-bottom:3px double #000;">
-                <td style="padding:6px; font-weight:bold; font-size:14px;">Net Salary</td>
-                <td style="padding:6px; text-align:right; font-weight:bold; font-size:14px;" id="slip_net">0.00</td>
-
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- SIGNATURE SECTION -->
-    <table style="width:100%; margin-top:25px; font-size:12px;">
-        <tr>
-            <td style="padding:10px;">
-                <strong>Employee Signature:</strong>
-                <div style="border-bottom:1px solid #000; height:22px; width:90%;"></div>
-            </td>
-            <td style="padding:10px;">
-                <strong>Employer Signature:</strong>
-                <div style="border-bottom:1px solid #000; height:22px; width:90%;"></div>
-            </td>
-        </tr>
-    </table>
-
-    <!-- COMPANY ADDRESS -->
-    {{--  <div id="slip_address"
-         style="text-align:center; margin-top:12px; font-size:11px; color:#666;">
-    </div>  --}}
-
-    <!-- FOOTER -->
-    <div style="margin-top:10px; text-align:center; font-size:11px; color:#777;">
-        Powered by ExactEHRM — {{ date('Y') }}
-    </div>
-
-</div>
                 </div>
                 <!-- DOWNLOAD INFO MODAL -->
                 <div class="modal fade" id="downloadInfoModal" tabindex="-1" aria-hidden="true">
@@ -618,7 +635,7 @@ $usageTotal = SalaryInsightLog::count();
                                     <input type="text" id="pop_last_name" class="form-control"
                                         placeholder="Enter last name">
                                 </div>
-                                   <div class="mb-3">
+                                <div class="mb-3">
                                     <label>Department Name</label>
                                     <input type="text" id="pop_department" class="form-control"
                                         placeholder="e.g. Finance, ICT, HR">
@@ -630,9 +647,9 @@ $usageTotal = SalaryInsightLog::count();
                                         placeholder="e.g. EMP-2451">
                                 </div>
                                 <div class="mb-3">
-                                <label>Pay Date</label>
-                                <input type="date" id="pop_pay_date" class="form-control">
-                            </div>
+                                    <label>Pay Date</label>
+                                    <input type="date" id="pop_pay_date" class="form-control">
+                                </div>
 
                                 <div class="mb-3">
                                     <label>Company Logo (Optional)</label>
@@ -723,7 +740,7 @@ $usageTotal = SalaryInsightLog::count();
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
- <script>
+<script>
     // ==========================
     // Helpers
     // ==========================

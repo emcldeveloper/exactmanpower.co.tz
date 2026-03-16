@@ -41,7 +41,7 @@
 
                             <tr>
                                 <td>
-                                    0.0  <span class="mx-4">–</span>
+                                    0.0 <span class="mx-4">–</span>
                                     <input type="number" class="form-control editable-field d-inline w-auto"
                                         name="payone_reduction" value="{{ $taxrate->payone_reduction }}" disabled>
                                 </td>
@@ -113,7 +113,8 @@
 
                             <tr>
                                 <td>
-                                    {{ number_format($taxrate->payfour_reduction + 1) }} <span class="mx-3">–</span> And Above
+                                    {{ number_format($taxrate->payfour_reduction + 1) }} <span class="mx-3">–</span> And
+                                    Above
                                 </td>
 
                                 <td>
@@ -136,9 +137,13 @@
 
                 <div class="mt-4">
 
-                    <button class="btn btn-primary" id="saveBtn" disabled>
-                        💾 Update PAYE Settings
-                    </button>
+                    <div class="mt-4 d-none" id="saveContainer">
+
+                        <button class="btn btn-primary" id="saveBtn">
+                            💾 Update PAYE Settings
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -196,6 +201,7 @@
 
 <script>
 function verifyPassword(){
+
     let password = document.getElementById('adminPassword').value;
 
     fetch("{{ url('admin/calculator/tax-rate/confirm-password') }}", {
@@ -208,23 +214,33 @@ function verifyPassword(){
     })
     .then(res => res.json())
     .then(data => {
-        if(data.success) {
-            document.querySelectorAll('.editable-field').forEach(function(field) {
+
+        if(data.success){
+
+            // enable all fields
+            document.querySelectorAll('.editable-field').forEach(function(field){
                 field.removeAttribute('disabled');
             });
 
-            document.getElementById('saveBtn').removeAttribute('disabled');
+            // show update button
+            document.getElementById('saveContainer').classList.remove('d-none');
 
-            // Bootstrap 4 way to hide modal (using jQuery)
+            // change unlock button style
+            document.getElementById('unlockBtn').innerHTML = "🔓 Editing Enabled";
+            document.getElementById('unlockBtn').classList.remove('btn-warning');
+            document.getElementById('unlockBtn').classList.add('btn-success');
+
+            // close modal
             $('#confirmPasswordModal').modal('hide');
-            
-            // OR if you prefer vanilla JavaScript with Bootstrap 4:
-            // $(document.getElementById('confirmPasswordModal')).modal('hide');
-            
-        } else {
+
+        }else{
+
             document.getElementById('passwordError').innerText = "Incorrect password";
+
         }
+
     });
+
 }
 </script>
 

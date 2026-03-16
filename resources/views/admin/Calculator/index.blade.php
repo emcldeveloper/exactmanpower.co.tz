@@ -335,291 +335,381 @@
 {{-- CHART JS --}}
 {{-- ========================= --}}
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
 
-    // ---- Trend Data from backend ----
-    const trendData = {
-        daily: {
-            labels: @json($usage_per_day->pluck('date')),
-            data: @json($usage_per_day->pluck('total')),
-        },
-        weekly: {
-            labels: @json($usage_per_week->pluck('label')),
-            data: @json($usage_per_week->pluck('total')),
-        },
-        monthly: {
-            labels: @json($usage_per_month->pluck('label')),
-            data: @json($usage_per_month->pluck('total')),
-        },
-        yearly: {
-            labels: @json($usage_per_year->pluck('year')),
-            data: @json($usage_per_year->pluck('total')),
-        }
-    };
+const monthNamesShort = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const monthNamesFull  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-    // ---- Trend Chart (default daily) ----
-    const trendCtx = document.getElementById('trendChart').getContext('2d');
 
-    let trendChart = new Chart(trendCtx, {
-        type: 'bar',
-        data: {
-            labels: trendData.daily.labels,
-            datasets: [{
-                label: 'Usage Count',
-                data: trendData.daily.data,
-                backgroundColor: 'rgba(211, 99, 20, 0.7)',
-                borderColor: '#D36314',
-                borderWidth: 1,
-                borderRadius: 6,
-                barPercentage: 0.4,      // 🔹 SMALLER bars
-                categoryPercentage: 0.7, // 🔹 more spacing between groups
-                maxBarThickness: 18      // 🔹 limit bar thickness
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: '#1a1a1a',
-                    callbacks: {
-                        label: function (context) {
-                            return ' Usage: ' + context.raw.toLocaleString();
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(0,0,0,0.03)' },
-                    ticks: {
-                        stepSize: 1,
-                        callback: value => value.toLocaleString()
-                    }
-                },
-                x: {
-                    grid: { display: false },
-                    ticks: { maxRotation: 45, minRotation: 45 }
-                }
-            }
-        }
+// ================= RAW DATA =================
+const rawDailyLabels  = @json($usage_per_day->pluck('date'));
+const rawDailyData    = @json($usage_per_day->pluck('total'));
+
+const rawWeeklyLabels = @json($usage_per_week->pluck('label'));
+const rawWeeklyData   = @json($usage_per_week->pluck('total'));
+
+const rawMonthlyLabels = @json($usage_per_month->pluck('label'));
+const rawMonthlyData   = @json($usage_per_month->pluck('total'));
+
+const rawYearlyLabels = @json($usage_per_year->pluck('year'));
+const rawYearlyData   = @json($usage_per_year->pluck('total'));
+
+
+// ================= DAILY MULTI MONTH =================
+let dailyLabels = [];
+let dailyData = [];
+
+let monthGroups = {};
+
+rawDailyLabels.forEach((date,i)=>{
+
+    const d = new Date(date);
+
+    const year = d.getFullYear();
+    const month = d.getMonth();
+
+    const key = year+'-'+month;
+
+    if(!monthGroups[key]){
+
+        monthGroups[key] = {
+            year:year,
+            month:month,
+            values:[]
+        };
+
+    }
+
+    monthGroups[key].values.push({
+        day:d.getDate(),
+        value:rawDailyData[i]
     });
 
-    // ---- Period toggle ----
-    document.querySelectorAll('.trend-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-
-            // Active style
-            document.querySelectorAll('.trend-btn').forEach(b => {
-                b.classList.remove('active', 'btn-primary');
-            });
-            this.classList.add('active', 'btn-primary');
-
-            const period = this.dataset.period;
-
-            trendChart.data.labels = trendData[period].labels;
-            trendChart.data.datasets[0].data = trendData[period].data;
-
-            if (period === 'daily' || period === 'weekly') {
-                trendChart.config.type = 'bar';
-                trendChart.data.datasets[0].backgroundColor = 'rgba(211, 99, 20, 0.7)';
-                trendChart.data.datasets[0].borderColor = '#D36314';
-                trendChart.data.datasets[0].borderWidth = 1;
-                trendChart.data.datasets[0].barPercentage = 0.4;
-                trendChart.data.datasets[0].categoryPercentage = 0.7;
-                trendChart.data.datasets[0].maxBarThickness = 18;
-                trendChart.data.datasets[0].tension = 0;
-                trendChart.data.datasets[0].fill = false;
-            } else {
-                trendChart.config.type = 'line';
-                trendChart.data.datasets[0].backgroundColor = 'rgba(211, 99, 20, 0.05)';
-                trendChart.data.datasets[0].borderColor = '#D36314';
-                trendChart.data.datasets[0].borderWidth = 3;
-                trendChart.data.datasets[0].tension = 0.4;
-                trendChart.data.datasets[0].fill = true;
-                trendChart.data.datasets[0].pointRadius = 4;
-                delete trendChart.data.datasets[0].barPercentage;
-                delete trendChart.data.datasets[0].categoryPercentage;
-                delete trendChart.data.datasets[0].maxBarThickness;
-            }
-
-            trendChart.update();
-
-            document.getElementById('activePeriod').textContent =
-                period.charAt(0).toUpperCase() + period.slice(1);
-        });
-    });
-
-    // ---- Salary Type Pie ----
-    new Chart(document.getElementById('salaryTypeChart'), {
-        type: 'pie',
-        data: {
-            labels: @json($salary_type_usage->pluck('salary_type')),
-            datasets: [{
-                data: @json($salary_type_usage->pluck('total')),
-                backgroundColor: ['#D36314', '#0d6efd', '#198754', '#ffc107', '#dc3545'],
-                borderWidth: 0,
-                hoverOffset: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                }
-            }
-        }
-    });
-
-    // ---- Currency Bar ----
-    new Chart(document.getElementById('currencyChart'), {
-        type: 'bar',
-        data: {
-            labels: @json($currency_usage->pluck('currency')),
-            datasets: [{
-                label: 'Usage Count',
-                data: @json($currency_usage->pluck('total')),
-                backgroundColor: ['#198754', '#ffc107', '#0d6efd', '#D36314', '#dc3545'],
-                borderRadius: 8,
-                barPercentage: 0.5,       // smaller bars
-                categoryPercentage: 0.7,
-                maxBarThickness: 20
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: { backgroundColor: '#1a1a1a' }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(0,0,0,0.03)' },
-                    ticks: { stepSize: 1 }
-                },
-                x: { grid: { display: false } }
-            }
-        }
-    });
-    //os
-    new Chart(document.getElementById('osChart'), {
-    type: 'pie',
-    data: {
-        labels: @json($os_usage->pluck('os')),
-        datasets: [{
-            data: @json($os_usage->pluck('total')),
-            backgroundColor: ['#0d6efd','#198754','#dc3545','#ffc107','#6f42c1'],
-            hoverOffset: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { position: 'bottom' }
-        }
-    }
 });
-// country
-new Chart(document.getElementById('countryChart'), {
-    type: 'doughnut',
-    data: {
-        labels: @json($country_usage->pluck('country')),
-        datasets: [{
-            data: @json($country_usage->pluck('total')),
-            backgroundColor: ['#0d6efd','#198754','#ffc107','#dc3545','#6610f2','#fd7e14'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { position: 'bottom' }
-        }
+
+
+Object.values(monthGroups).forEach(group=>{
+
+    const daysInMonth = new Date(group.year, group.month+1, 0).getDate();
+
+    for(let d=1; d<=daysInMonth; d++){
+
+        dailyLabels.push(monthNamesShort[group.month]+' '+d);
+
+        const found = group.values.find(item=>item.day===d);
+
+        dailyData.push(found ? found.value : 0);
+
     }
+
 });
-//city
-new Chart(document.getElementById('cityChart'), {
-    type: 'bar',
-    data: {
-        labels: @json($city_usage->pluck('city')),
-        datasets: [{
-            label: 'City Usage',
-            data: @json($city_usage->pluck('total')),
-            backgroundColor: '#D36314',
-            borderRadius: 8,
-            barPercentage: 0.5
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { display: false }
-        },
-        scales: {
-            y: { beginAtZero: true },
-            x: { grid: { display: false } }
-        }
-    }
+
+
+// ================= WEEKLY =================
+let weeklyLabels = [];
+let weeklyData = [];
+
+rawWeeklyData.forEach((value,i)=>{
+
+    weeklyLabels.push(i+1);
+    weeklyData.push(value);
+
 });
-//browser
-new Chart(document.getElementById('browserChart'), {
-    type: 'doughnut',
-    data: {
-        labels: @json($browser_usage->pluck('browser')),
-        datasets: [{
-            data: @json($browser_usage->pluck('total')),
-            backgroundColor: ['#0dcaf0','#6610f2','#fd7e14','#20c997','#dc3545'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: { position: 'bottom' }
-        }
+
+
+// ================= MONTHLY =================
+let monthlyLabels = monthNamesShort;
+let monthlyData = new Array(12).fill(0);
+
+rawMonthlyLabels.forEach((m,i)=>{
+
+    let monthIndex;
+
+    if(/^\d{4}-\d{2}/.test(m)){
+
+        monthIndex = parseInt(m.split('-')[1]) - 1;
+
+    }else{
+
+        monthIndex = parseInt(m) - 1;
+
     }
+
+    if(monthIndex>=0 && monthIndex<12){
+
+        monthlyData[monthIndex] = rawMonthlyData[i];
+
+    }
+
 });
-//device
-new Chart(document.getElementById('deviceChart'), {
-    type: 'bar',
-    data: {
-        labels: @json($device_usage->pluck('device')),
-        datasets: [{
-            label: 'Device Count',
-            data: @json($device_usage->pluck('total')),
-            backgroundColor: ['#198754','#0d6efd','#D36314'],
-            borderRadius: 8,
-            barPercentage: 0.5
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-            y: { beginAtZero: true },
-            x: { grid: { display: false } }
-        }
+
+
+// ================= YEARLY =================
+const now = new Date();
+const currentYear = now.getFullYear();
+
+let yearlyLabels = [];
+let yearlyData = [];
+
+const allowedYears = [currentYear-2,currentYear-1,currentYear];
+
+rawYearlyLabels.forEach((y,i)=>{
+
+    if(allowedYears.includes(parseInt(y))){
+
+        yearlyLabels.push(y);
+        yearlyData.push(rawYearlyData[i]);
+
     }
+
+});
+
+
+// ================= TREND DATA =================
+const trendData = {
+
+    daily:{
+        labels:dailyLabels,
+        data:dailyData,
+        xTitle:'Days'
+    },
+
+    weekly:{
+        labels:weeklyLabels,
+        data:weeklyData,
+        xTitle:'Weeks'
+    },
+
+    monthly:{
+        labels:monthlyLabels,
+        data:monthlyData,
+        xTitle:currentYear
+    },
+
+    yearly:{
+        labels:yearlyLabels,
+        data:yearlyData,
+        xTitle:'Years'
+    }
+
+};
+
+
+// ================= TREND CHART =================
+const trendCtx = document.getElementById('trendChart').getContext('2d');
+
+let trendChart = new Chart(trendCtx,{
+
+type:'bar',
+
+data:{
+labels:trendData.daily.labels,
+datasets:[{
+label:'Usage Count',
+data:trendData.daily.data,
+backgroundColor:'rgba(211,99,20,0.7)',
+borderColor:'#D36314',
+borderWidth:1,
+borderRadius:6,
+barPercentage:0.4,
+categoryPercentage:0.7,
+maxBarThickness:18
+}]
+},
+
+options:{
+responsive:true,
+maintainAspectRatio:false,
+
+plugins:{
+legend:{display:false},
+tooltip:{
+backgroundColor:'#1a1a1a',
+callbacks:{
+label:function(context){
+return ' Usage: '+context.raw.toLocaleString();
+}
+}
+}
+},
+
+scales:{
+y:{
+beginAtZero:true,
+grid:{color:'rgba(0,0,0,0.03)'},
+ticks:{stepSize:1}
+},
+
+x:{
+grid:{display:false},
+title:{
+display:true,
+text:trendData.daily.xTitle
+}
+}
+}
+
+}
+
+});
+
+
+// ================= PERIOD SWITCH =================
+function applyTrendStyle(period){
+
+trendChart.data.labels = trendData[period].labels;
+trendChart.data.datasets[0].data = trendData[period].data;
+trendChart.options.scales.x.title.text = trendData[period].xTitle;
+
+if(period === 'daily' || period === 'weekly'){
+
+trendChart.config.type = 'bar';
+
+trendChart.data.datasets[0].backgroundColor='rgba(211,99,20,0.7)';
+trendChart.data.datasets[0].borderWidth=1;
+
+}else{
+
+trendChart.config.type='line';
+
+trendChart.data.datasets[0].backgroundColor='rgba(211,99,20,0.08)';
+trendChart.data.datasets[0].borderColor='#D36314';
+trendChart.data.datasets[0].borderWidth=3;
+trendChart.data.datasets[0].fill=true;
+trendChart.data.datasets[0].tension=0.4;
+trendChart.data.datasets[0].pointRadius=4;
+
+}
+
+trendChart.update();
+
+document.getElementById('activePeriod').textContent =
+period.charAt(0).toUpperCase()+period.slice(1);
+
+}
+
+
+document.querySelectorAll('.trend-btn').forEach(btn=>{
+
+btn.addEventListener('click',function(){
+
+document.querySelectorAll('.trend-btn').forEach(b=>{
+b.classList.remove('active','btn-primary');
+});
+
+this.classList.add('active','btn-primary');
+
+const period=this.dataset.period;
+
+applyTrendStyle(period);
+
+});
+
+});
+
+
+// ================= SALARY TYPE PIE =================
+new Chart(document.getElementById('salaryTypeChart'),{
+type:'pie',
+data:{
+labels:@json($salary_type_usage->pluck('salary_type')),
+datasets:[{
+data:@json($salary_type_usage->pluck('total')),
+backgroundColor:['#D36314','#0d6efd','#198754','#ffc107','#dc3545'],
+borderWidth:0,
+hoverOffset:8
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= CURRENCY BAR =================
+new Chart(document.getElementById('currencyChart'),{
+type:'bar',
+data:{
+labels:@json($currency_usage->pluck('currency')),
+datasets:[{
+data:@json($currency_usage->pluck('total')),
+backgroundColor:['#198754','#ffc107','#0d6efd','#D36314','#dc3545'],
+borderRadius:8
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= OS =================
+new Chart(document.getElementById('osChart'),{
+type:'pie',
+data:{
+labels:@json($os_usage->pluck('os')),
+datasets:[{
+data:@json($os_usage->pluck('total')),
+backgroundColor:['#0d6efd','#198754','#dc3545','#ffc107','#6f42c1']
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= COUNTRY =================
+new Chart(document.getElementById('countryChart'),{
+type:'doughnut',
+data:{
+labels:@json($country_usage->pluck('country')),
+datasets:[{
+data:@json($country_usage->pluck('total')),
+backgroundColor:['#0d6efd','#198754','#ffc107','#dc3545','#6610f2','#fd7e14']
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= CITY =================
+new Chart(document.getElementById('cityChart'),{
+type:'bar',
+data:{
+labels:@json($city_usage->pluck('city')),
+datasets:[{
+data:@json($city_usage->pluck('total')),
+backgroundColor:'#D36314'
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= BROWSER =================
+new Chart(document.getElementById('browserChart'),{
+type:'doughnut',
+data:{
+labels:@json($browser_usage->pluck('browser')),
+datasets:[{
+data:@json($browser_usage->pluck('total')),
+backgroundColor:['#0dcaf0','#6610f2','#fd7e14','#20c997','#dc3545']
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
+});
+
+
+// ================= DEVICE =================
+new Chart(document.getElementById('deviceChart'),{
+type:'bar',
+data:{
+labels:@json($device_usage->pluck('device')),
+datasets:[{
+data:@json($device_usage->pluck('total')),
+backgroundColor:['#198754','#0d6efd','#D36314']
+}]
+},
+options:{responsive:true,maintainAspectRatio:false}
 });
 
 });
 </script>
-
 <style>
     .card {
         transition: transform 0.2s, box-shadow 0.2s;
