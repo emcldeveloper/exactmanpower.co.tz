@@ -220,15 +220,17 @@ $usageTotal = SalaryInsightLog::count();
                             {{-- NET INPUT (shown if salaryType = net) --}}
                             <div class="form-row" id="net_row" style="display:none;">
                                 <label>Net Salary</label>
-                                <input type="text" id="net_pay" name="net_pay" placeholder="Enter net salary"
-                                    onkeyup="validateNumberInput(this); runAjaxCalculation()">
+                                <input type="text" id="net_pay" name="net_pay" placeholder="Enter net salary" {{--
+                                    onkeyup="validateNumberInput(this); runAjaxCalculation()" --}}
+                                    onkeyup="validateNumberInput(this); handleTyping(this)">
                             </div>
 
                             {{-- GROSS INPUT (shown if salaryType = gross) --}}
                             <div class="form-row" id="basic_row" style="display:none;">
                                 <label>Basic Salary</label>
-                                <input type="text" id="basic_pay" name="basic_pay" placeholder="Enter basic salary"
-                                    onkeyup="validateNumberInput(this);runAjaxCalculation()">
+                                <input type="text" id="basic_pay" name="basic_pay" placeholder="Enter basic salary" {{--
+                                    onkeyup="validateNumberInput(this);runAjaxCalculation()" --}}
+                                    onkeyup="validateNumberInput(this); handleTyping(this)">
                             </div>
 
                             {{-- Allowances --}}
@@ -741,6 +743,9 @@ $usageTotal = SalaryInsightLog::count();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    let typingTimer;
+let doneTypingDelay = 700;
+let lastTrackedValue = "";
     // ==========================
     // Helpers
     // ==========================
@@ -1139,5 +1144,27 @@ $usageTotal = SalaryInsightLog::count();
         toggleExchangeRateRow();
         clearResults();
     });
+  function handleTyping(el) {
+    let value = el.value;
+
+    if (value === '') {
+        lastTrackedValue = "";
+        clearTimeout(typingTimer);
+        return;
+    }
+
+    clearTimeout(typingTimer);
+
+    typingTimer = setTimeout(function () {
+
+        if (value !== lastTrackedValue) {
+            lastTrackedValue = value;
+
+            runAjaxCalculation(); // ✅ ONLY once
+        }
+
+    }, doneTypingDelay);
+}
+
 </script>
 @endsection
