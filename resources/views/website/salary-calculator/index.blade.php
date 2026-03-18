@@ -7,10 +7,13 @@
 
 @php
 use App\Models\PayCalculator;
-use App\Models\SalaryInsightLog;
+use App\Models\SalaryUsageSummary;
 
 $data = PayCalculator::first();
-$usageTotal = SalaryInsightLog::count();
+$net = SalaryUsageSummary::where('type', 'net')->value('view_count') ?? 0;
+$gross = SalaryUsageSummary::where('type', 'gross')->value('view_count') ?? 0;
+
+$usageTotal = $net + $gross;
 @endphp
 
 <style>
