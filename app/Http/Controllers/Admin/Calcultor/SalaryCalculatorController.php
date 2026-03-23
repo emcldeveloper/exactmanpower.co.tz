@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Calcultor;
 
 use App\Http\Controllers\Controller;
 use App\Models\SalaryInsightLog;
+use App\Models\SalaryUsageSummary;
 use Illuminate\Http\Request;
 
 class SalaryCalculatorController extends Controller
@@ -49,7 +50,8 @@ class SalaryCalculatorController extends Controller
                     break;
             }
         }
-
+         $total_calculation=SalaryUsageSummary::sum('view_count');
+        
         // -----------------------------
         // 2. BASE QUERY
         // -----------------------------
@@ -152,6 +154,7 @@ class SalaryCalculatorController extends Controller
             'browser_usage',
             'city_usage',
             'country_usage',
+            'total_calculation',
         ));
     }
 }

@@ -87,8 +87,8 @@
             <div class="row g-4 mb-5">
 
                 {{-- Total Uses --}}
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
+                <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-82">
                         <div class="card-body p-4">
                             <div class="d-flex align-items-center">
                                 <div class="flex-shrink-0">
@@ -97,15 +97,40 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <span class="text-muted small text-uppercase fw-semibold">
+                                    <span class="text-muted small text-uppercase fw-semibold " style="font-size: 11px;">
+                                        <i class="bi bi-arrow-up-short me-1"></i>Total Calculation Uses
+                                    </span>
+                                    <h2 class="fw-bold mb-0 display-6" style="font-size: 25px;">
+                                        {{ number_format($total_calculation) }}
+                                    </h2>
+                                    <small class="text-success">
+                                          <i class="bi bi-people me-1"></i>
+                                        Calculations
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                                 <div class="col-md-3">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-82">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-gradient bg-opacity-10 p-3 rounded-3">
+                                        <i class="bi bi-calculator-fill fs-1 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <span class="text-muted small text-uppercase fw-semibold" style="font-size: 11px;">
                                         <i class="bi bi-arrow-up-short me-1"></i>Total Calculator Uses
                                     </span>
-                                    <h2 class="fw-bold mb-0 display-6">
+                                    <h2 class="fw-bold mb-0 display-6"  style="font-size: 25px;">
                                         {{ number_format($total_uses) }}
                                     </h2>
                                     <small class="text-success">
                                         <i class="bi bi-graph-up me-1"></i>
-                                        Analytics based on filtered period
+                                      Filtered Period Analytics
                                     </small>
                                 </div>
                             </div>
@@ -114,7 +139,7 @@
                 </div>
 
                 {{-- Most Used Salary Type --}}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                         <div class="card-body p-4">
                             <div class="d-flex align-items-center">
@@ -124,7 +149,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <span class="text-muted small text-uppercase fw-semibold">
+                                    <span class="text-muted small text-uppercase fw-semibold" style="font-size: 11px;">
                                         <i class="bi bi-star-fill me-1 text-warning"></i>Most Popular Type
                                     </span>
                                     @php
@@ -144,7 +169,7 @@
                 </div>
 
                 {{-- Most Used Currency --}}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
                         <div class="card-body p-4">
                             <div class="d-flex align-items-center">
@@ -154,7 +179,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1 ms-3">
-                                    <span class="text-muted small text-uppercase fw-semibold">
+                                    <span class="text-muted small text-uppercase fw-semibold" style="font-size: 11px;">
                                         <i class="bi bi-globe2 me-1"></i>Top Currency
                                     </span>
                                     @php
@@ -178,7 +203,7 @@
             {{-- ========================= --}}
             {{-- CHARTS --}}
             {{-- ========================= --}}
-            <div class="row g-4">
+            <div class="row g-3">
 
                 {{-- Usage Trend Chart --}}
                 <div class="col-6 mb-4">
