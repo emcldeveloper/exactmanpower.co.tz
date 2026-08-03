@@ -19,6 +19,7 @@ Route::post('password/change', 'Auth\LoginController@reset_password')->name('sto
 use App\Http\Controllers\Admin\Calcultor\SalaryCalculatorController;
 use App\Http\Controllers\Website\SalaryAjaxController as WebsiteSalaryAjaxController;
 use App\Http\Controllers\Admin\InsightCalculator\SalaryInsightController;
+use App\Http\Controllers\Website\ExactEhrmController;
 
 // retrieve home page
 Route::group(['namespace'=>'Website', 'middleware' => []], function () { 
@@ -26,6 +27,7 @@ Route::group(['namespace'=>'Website', 'middleware' => []], function () {
     Route::get('/', 'HomeController@home');
     Route::get('welcome', 'HomeController@welcome');
     Route::get('about', 'HomeController@about');
+    Route::get('exactehrm', 'ExactEhrmController@index');
     Route::get('services', 'HomeController@services');
     Route::get('services/{slug}', 'HomeController@services_single');
     Route::get('team', 'HomeController@team');

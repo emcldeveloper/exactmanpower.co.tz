@@ -107,7 +107,8 @@
 <div class="header-menu clearfix bg-white" style="z-index:20;">
     <div class="container-fluid px-0">
         <div class="container">
-            <nav class="navbar navbar-expand-lg navbar-light d-block d-md-flex px-0">
+            {{--  <nav class="navbar navbar-expand-lg navbar-light d-block d-md-flex px-0">  --}}
+                <nav class="navbar navbar-expand-lg navbar-light d-block d-md-flex px-0">
                 
                 <a class="navbar-brand" href="{{ url('/') }}">
                     @if(false)
@@ -147,7 +148,8 @@
                         </ul>
                     </div> 
                     --}}
-                    <div class="collapse navbar-collapse text-muted" id="navbarSupportedContent">
+                    {{--  <div class="collapse navbar-collapse text-muted" id="navbarSupportedContent">  --}}
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto text-secondary">
                             <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
                                 <a class="nav-link text-nowrap text-uppercase {{ Request::is('/')? 'active':'' }}" href="{{ url('/') }}">Home</a>
@@ -187,9 +189,10 @@
                               <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
                                 <a class="nav-link text-nowrap text-uppercase" href="https://ekazi.co.tz/" target="__blank" >Jobs</a>
                             </li>
-                            {{--  <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
-                                <a class="nav-link text-nowrap text-uppercase" href="#"  >Employer Zone</a>
-                            </li>  --}}
+                        
+                            <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
+                                <a class="nav-link text-nowrap text-uppercase" href="https://exactehrm.co.tz/"  >Exactehrm</a>
+                            </li>
                            
 
                             @foreach(App\Models\PostType::all() as $menu)

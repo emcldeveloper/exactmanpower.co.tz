@@ -38,7 +38,7 @@ $usageTotal = $net + $gross;
 
     .carousel-item img {
         border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    
     }
 
     /* Ensure equal alignment */
@@ -53,11 +53,56 @@ $usageTotal = $net + $gross;
         /* adjust: 0px–10px */
     }
 
-    /* Remove extra space around images */
+    .salaryCarousel .carousel-item {
+        height: 200px;
+    }
+
     .salaryCarousel .carousel-item img {
-        margin-bottom: 0 !important;
-        padding-bottom: 0 !important;
-        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    /* Reduce space below the carousel */
+    .salaryCarousel {
+        margin-bottom: 0;
+    }
+
+    .barcode-section {
+        margin-top: -5px;
+    }
+
+        {
+            {
+            -- .barcode-img {
+                width: 90px;
+            }
+
+            --
+        }
+    }
+
+
+
+    /* Smaller barcode */
+    .barcode-img {
+        width: 390px;
+        /* Change to 90px or 100px if you want smaller */
+        height: auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 4px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    }
+
+    /* Caption */
+    .barcode-text {
+        margin-top: 4px;
+        margin-bottom: 0;
+        font-size: 13px;
+        font-weight: 600;
+        color: #555;
     }
 
     /* Remove default spacing for app-button-link */
@@ -685,6 +730,7 @@ $usageTotal = $net + $gross;
                 <div id="salaryCarousel" class="carousel slide salaryCarousel" data-ride="carousel">
 
                     <div class="carousel-inner">
+
                         <div class="carousel-item active">
                             <img class="d-block w-100" src="{{ asset('img/calculator/fist_last.jpeg') }}"
                                 alt="Salary App">
@@ -704,10 +750,6 @@ $usageTotal = $net + $gross;
                                 alt="Salary App">
                         </div>
 
-                        {{-- <div class="carousel-item">
-                            <img class="d-block w-100" src="{{ asset('img/calculator/fist_last.jpeg') }}"
-                                alt="Salary App">
-                        </div> --}}
                     </div>
 
                     <a class="carousel-control-prev" href="#salaryCarousel" role="button" data-slide="prev">
@@ -720,19 +762,26 @@ $usageTotal = $net + $gross;
 
                 </div>
 
-                <div class="app-button-link  text-center">
-                    <a href="https://play.google.com/store/apps/details?id=com.exactmanpower.emsalarycalculator"
-                        target="_blank">
-                        <img src="{{ asset('img/calculator/playstore.png') }}" alt="Play Store">
+                <!-- QR Code Section -->
+                <div class="text-center barcode-section">
+
+                    <a href="https://exactehrm.co.tz/" target="_blank" rel="noopener noreferrer">
+
+                        <img src="{{ asset('img/calculator/exacthrm.jpeg') }}" alt="Scan QR Code" class="barcode-img">
+
                     </a>
 
-                    <a href="https://apps.apple.com/tz/app/exactehrm/id6755229808" target="_blank">
-                        <img src="{{ asset('img/calculator/appstore.png') }}" alt="App Store">
-                    </a>
+                    <p class="barcode-text">
+                        <a href="https://exactehrm.co.tz/" target="_blank" rel="noopener noreferrer"
+                            class="text-decoration-none text-dark">
+                            Visit ExactEHRM
+                        </a>
+                    </p>
+
                 </div>
 
-
             </div>
+
 
         </div>
     </div>
