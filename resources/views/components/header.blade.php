@@ -191,7 +191,7 @@
                             </li>
                         
                             <li class="nav-item ml-0 ml-lg-3 mb-3 mb-lg-0">
-                                <a class="nav-link text-nowrap text-uppercase" href="https://exactehrm.co.tz/"  >Exactehrm</a>
+                                <a class="nav-link text-nowrap text-uppercase" href="https://exactehrm.co.tz/" target="__blank"  >Exactehrm</a>
                             </li>
                            
 
