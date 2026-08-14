@@ -1,7 +1,13 @@
 @extends('website')
-<!-- We have remove helper for a while and replace with Gallery, more study is needed to understand, to make it work, replace Gallery with Helper::trans('general.blog', 'Gallery') -->
+{{--  <!-- We have remove helper for a while and replace with Gallery, more study is needed to understand, to make it work, replace Gallery with Helper::trans('general.blog', 'Gallery') -->
 @section('title', 'Gallery')
-<!-- After page-tille add Helper::trans('general.blog_title', 'Stay Connected With Us' -->
+<!-- After page-tille add Helper::trans('general.blog_title', 'Stay Connected With Us' -->  --}}
+ @php
+    $seo = \App\Models\SeoPage::where('page_key', 'get_updated_with/gallery')
+        ->first();
+@endphp
+
+@section('title', $seo?->title ?? 'get_updated_with/gallery')
 @section('page-title', 'Gallery')
 @section('content')
 <style>

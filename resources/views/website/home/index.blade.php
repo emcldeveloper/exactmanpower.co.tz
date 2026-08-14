@@ -1,6 +1,7 @@
 @extends('website')
-
-@section('title', 'Home')
+{{--  
+@section('title', 'Home')  --}}
+@section('title', $seo->title ?? 'Exact Manpower Consulting Ltd')
 
 @section('content')
 @livewireStyles

@@ -1,6 +1,10 @@
 @extends('website')
+  @php
+    $seo = \App\Models\SeoPage::where('page_key', 'get_updated_with/newsroom')
+        ->first();
+@endphp
 
-@section('title', 'Newsroom')
+@section('title', $seo?->title ?? 'get_updated_with/newsroom')
 @section('page-title', 'Stay Connected With Us')
 
 @section('content')

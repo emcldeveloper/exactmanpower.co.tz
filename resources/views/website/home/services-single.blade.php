@@ -1,6 +1,11 @@
 @extends('website')
 
-@section('title', @$post_model->post_title)
+  @php
+    $seo = \App\Models\SeoPage::where('page_key', 'services')
+        ->first();
+@endphp
+
+@section('title', $seo?->title ?? 'services')
 @section('page-title', @$post_model->post_title)
 @section('content')
  

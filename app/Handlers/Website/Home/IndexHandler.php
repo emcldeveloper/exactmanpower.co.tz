@@ -19,7 +19,7 @@ class IndexHandler
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public static function handler(Request $request, $api = false)
+    public static function handler(Request $request, $api = false ,$seo = null)
     {
 
         // initialize data to send to the view or client
@@ -34,6 +34,9 @@ class IndexHandler
         $data['clients_list'] = $clients_list;
         $data['testimony_list'] = $testimony_list;
         $data['team'] = $team;
+
+          // SEO
+        $data['seo'] = $seo;
 
         // if $api is true return the json data
         if($api){

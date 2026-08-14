@@ -19,13 +19,16 @@ use App\Handlers\Website\Home\StoriesSingleHandler as HomeStoriesSingleHandler;
 use App\Handlers\Website\Home\ServicesHandler as HomeServicesHandler;
 use App\Handlers\Website\Home\ServicesSingleHandler as HomeServicesSingleHandler;
 
+use App\Services\SeoService;
+
 
 class HomeController extends \App\Http\Controllers\Controller
 {
     /**
      * This function run first automatic before any other function
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         // Run middleware for Posts controller
         // $this->middleware(['auth']);
@@ -42,9 +45,19 @@ class HomeController extends \App\Http\Controllers\Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function home(Request $request)
+    // public function home(Request $request)
+    // {
+    //     return HomeHomeHandler::handler($request, $this->api);
+    // }
+    public function home(Request $request, SeoService $seoService)
     {
-        return HomeHomeHandler::handler($request, $this->api);
+        $seo = $seoService->get('home');
+
+        return HomeHomeHandler::handler(
+            $request,
+            $this->api,
+            $seo
+        );
     }
 
     /**
@@ -82,7 +95,7 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomePageHandler::handler($request, $slug, $this->api);
     }
-    
+
 
     /**
      * Display a listing of the Account Orders.
@@ -146,7 +159,7 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomeTeamSingleHandler::handler($request, $slug, $this->api);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -156,7 +169,7 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomeStoriesHandler::handler($request, $this->api);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -166,7 +179,7 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomeStoriesSingleHandler::handler($request, $slug, $this->api);
     }
-    
+
 
     /**
      * Display a listing of the resource.
@@ -177,7 +190,7 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomeServicesHandler::handler($request, $this->api);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -187,5 +200,4 @@ class HomeController extends \App\Http\Controllers\Controller
     {
         return HomeServicesSingleHandler::handler($request, $slug, $this->api);
     }
-    
 }

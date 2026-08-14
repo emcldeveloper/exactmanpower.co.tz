@@ -1,6 +1,12 @@
 @extends('website')
 
-@section('title', 'Salary Calculator')
+ 
+ @php
+    $seo = \App\Models\SeoPage::where('page_key', 'Salary Calculator')
+        ->first();
+@endphp
+
+@section('title', $seo?->title ?? 'Salary Calculator')
 @section('page-title', 'Salary Calculator')
 
 @section('content')

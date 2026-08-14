@@ -1,10 +1,124 @@
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
-<head>
+{{--  <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title id="page_title">@yield('title') - {{ config('app.name') }}</title>
+    <title id="page_title">@yield('title') - {{ config('app.name') }}</title>  --}}
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    {{-- =====================================================
+         SEO
+    ====================================================== --}}
+
+    <title id="page_title">
+        {{ $seo->title ?? trim($__env->yieldContent('title')) . ' - ' . config('app.name') }}
+    </title>
+
+    @if(!empty($seo))
+
+    {{-- Meta Description --}}
+    @if(!empty($seo['description']))
+        <meta
+            name="description"
+            content="{{ $seo['description'] }}"
+        >
+    @endif
+
+    {{-- Canonical --}}
+    @if(!empty($seo['canonical_url']))
+        <link
+            rel="canonical"
+            href="{{ $seo['canonical_url'] }}"
+        >
+    @endif
+
+    {{-- Robots --}}
+    <meta
+        name="robots"
+        content="index, follow"
+    >
+
+    {{-- Open Graph --}}
+    <meta
+        property="og:type"
+        content="website"
+    >
+
+    <meta
+        property="og:site_name"
+        content="{{ config('app.name') }}"
+    >
+
+    <meta
+        property="og:title"
+        content="{{ $seo['og_title'] ?? $seo['title'] ?? '' }}"
+    >
+
+    <meta
+        property="og:description"
+        content="{{ $seo['og_description'] ?? $seo['description'] ?? '' }}"
+    >
+
+    @if(!empty($seo['canonical_url']))
+        <meta
+            property="og:url"
+            content="{{ $seo['canonical_url'] }}"
+        >
+    @endif
+
+    {{--  @if(!empty($seo['og_image']))
+        <meta
+            property="og:image"
+            content="{{ asset($seo['og_image']) }}"
+        >
+    @endif  --}}
+
+    {{-- Twitter --}}
+    <meta
+        name="twitter:card"
+        content="summary_large_image"
+    >
+
+    <meta
+        name="twitter:title"
+        content="{{ $seo['og_title'] ?? $seo['title'] ?? '' }}"
+    >
+
+    <meta
+        name="twitter:description"
+        content="{{ $seo['og_description'] ?? $seo['description'] ?? '' }}"
+    >
+
+    {{--  @if(!empty($seo['og_image']))
+        <meta
+            name="twitter:image"
+            content="{{ asset($seo['og_image']) }}"
+        >
+    @endif  --}}
+
+    {{-- Schema.org --}}
+    {{--  @if(!empty($seo['schema']))
+
+        <script type="application/ld+json">
+            {!! json_encode(
+                $seo['schema'],
+                JSON_UNESCAPED_SLASHES |
+                JSON_UNESCAPED_UNICODE |
+                JSON_PRETTY_PRINT
+            ) !!}
+        </script>
+
+    @endif  --}}
+
+@endif
+
+    {{-- =====================================================
+         END SEO
+    ====================================================== --}}
     <base href="{{ url('/') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

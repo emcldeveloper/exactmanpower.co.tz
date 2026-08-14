@@ -1,6 +1,12 @@
 @extends('website')
 
-@section('title', 'Contact')
+ 
+ @php
+    $seo = \App\Models\SeoPage::where('page_key', 'contact')
+        ->first();
+@endphp
+
+@section('title', $seo?->title ?? 'Contact')
 @section('page-title', 'Contact')
 
 @section('content')
