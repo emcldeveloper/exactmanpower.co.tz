@@ -1,11 +1,11 @@
 @extends('website')
 
  @php
-    $seo = \App\Models\SeoPage::where('page_key', 'get_updated_with/gallery')
+    $seo = \App\Models\SeoPage::where('page_key', 'get_updated_with/newsroom')
         ->first();
 @endphp
 
-@section('title', $seo?->title ?? 'get_updated_with/gallery')
+@section('title', $seo?->title ?? 'Newsroom')
 @section('page-title', 'Newsroom')
 
 @section('content')                 

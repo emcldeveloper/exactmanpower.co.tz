@@ -4,7 +4,7 @@
         ->first();
 @endphp
 
-@section('title', $seo?->title ?? 'get_updated_with/newsroom')
+@section('title', $seo?->title ?? 'newsroom')
 @section('page-title', 'Stay Connected With Us')
 
 @section('content')

@@ -1,11 +1,11 @@
 @extends('website')
 
   @php
-    $seo = \App\Models\SeoPage::where('page_key', 'hr-consulting')
+    $seo = \App\Models\SeoPage::where('page_key', 'services')
         ->first();
 @endphp
 
-@section('title', $seo?->title ?? 'hr-consulting')
+@section('title', $seo?->title ?? 'services')
 @section('page-title', 'Services')
 @section('page-description', 'We Help you transform your business through effective use of Human Resources. We work in partnership with you to implement appropriate HR services, interventions and solutions that ultimately deliver desired outcomes for your business.')
 

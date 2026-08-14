@@ -70,12 +70,12 @@
         >
     @endif
 
-    {{--  @if(!empty($seo['og_image']))
+    @if(!empty($seo['og_image']))
         <meta
             property="og:image"
             content="{{ asset($seo['og_image']) }}"
         >
-    @endif  --}}
+    @endif
 
     {{-- Twitter --}}
     <meta
@@ -93,12 +93,12 @@
         content="{{ $seo['og_description'] ?? $seo['description'] ?? '' }}"
     >
 
-    {{--  @if(!empty($seo['og_image']))
+    @if(!empty($seo['og_image']))
         <meta
             name="twitter:image"
             content="{{ asset($seo['og_image']) }}"
         >
-    @endif  --}}
+    @endif
 
     {{-- Schema.org --}}
     {{--  @if(!empty($seo['schema']))
